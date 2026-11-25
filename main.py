@@ -16,11 +16,12 @@ ENTRY = (
 
 def main() -> None:
     os.umask(0o022)
-    os.makedirs("/output", exist_ok=True)
+    out_dir = os.environ.get("MAKEFUN_OUTPUT_DIR", "/output")
+    os.makedirs(out_dir, exist_ok=True)
     text = ENTRY
     assert 1 <= len(text) <= 200, "entry must be 1-200 characters"
     assert text.strip(), "entry must not be only whitespace"
-    path = "/output/entry.txt"
+    path = os.path.join(out_dir, "entry.txt")
     with open(path, "w", encoding="utf-8", newline="") as f:
         f.write(text)
     os.chmod(path, 0o644)
